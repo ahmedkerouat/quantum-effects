@@ -5,7 +5,7 @@ bool leftMousePressed = false;
 bool spaceKeyPressed = false;
 glm::vec2 lastMousePos;
 float yaw = -90.0f;
-float pitch = 0.0f;
+float pitch = 10.0f;
 float fov = 45.0f;
 float cameraSpeed = 0.005f;
 
@@ -92,7 +92,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
         // Reset the view to normal
         yaw = -90.0f;
-        pitch = 0.0f;
+        pitch = 10.0f;
         zoom = 1.0f;
         cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
     }
