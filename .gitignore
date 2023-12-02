@@ -1,3 +1,5 @@
 .vs
 out
+source/dlls
+source/include/glm
 CMakePresets.json
