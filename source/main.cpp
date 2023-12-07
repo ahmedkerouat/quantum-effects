@@ -88,11 +88,13 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // unique sphere
-        glm::mat4 model = glm::mat4(1.0f);
-        renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+        //glm::mat4 model = glm::mat4(1.0f);
+        //renderUniqueSphere(shaderProgram, VAO, sphereIndices);
 
         // Render superposition state
-        renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        //renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
+
+        renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
