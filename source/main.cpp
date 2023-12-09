@@ -94,7 +94,9 @@ int main() {
         // Render superposition state
         //renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
-        renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        //renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
+
+        renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();

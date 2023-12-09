@@ -1,3 +1,51 @@
+void renderWaveTrail(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
+    glUseProgram(shaderProgram);
+
+    glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 9.0f, 0.0f));
+    view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::rotate(view, glm::radians(pitch), glm::vec3(1.0f, 1.0f, 0.0f));
+    glm::mat4 projection = glm::perspective(glm::radians(fov * zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+
+    GLuint viewLoc = glGetUniformLocation(shaderProgram, "view");
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+    GLuint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+    GLint lightColorLoc = glGetUniformLocation(shaderProgram, "lightColor");
+    GLint objectColorLoc = glGetUniformLocation(shaderProgram, "objectColor");
+    GLint ambientStrengthLoc = glGetUniformLocation(shaderProgram, "ambientStrength");
+
+    glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+    glUniform1f(ambientStrengthLoc, 0.6f);
+
+    int numSpheres = 50;
+    float sphereSpacing = 0.15f;
+
+    for (int i = 0; i < numSpheres; ++i) {
+
+        // sinusoidal wave
+
+        float displacement = sin(2.0f * time - i * sphereSpacing);
+        float normalizedPosition = (displacement + 0.1f) / 0.2f;
+        glm::vec3 objectColor = glm::vec3(0.0f - normalizedPosition * 0.5, 0.0f, 0.8f);
+
+        glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
+
+        float scaleFactor = (i == 0) ? 3.0f : 1.0f;
+
+        // smooth effect
+        glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f * scaleFactor)) * glm::translate(glm::mat4(1.0f), glm::vec3(i * sphereSpacing, displacement / scaleFactor, 0.0f));
+
+        GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
+    }
+}
+
+
 void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
     glUseProgram(shaderProgram);
 
