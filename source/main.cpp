@@ -96,7 +96,7 @@ int main() {
 
         //renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
-        renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        //renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
