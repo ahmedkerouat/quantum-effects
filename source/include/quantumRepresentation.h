@@ -178,3 +178,68 @@ void renderSuperpositionSphere(GLuint shaderProgram, GLuint VAO, const std::vect
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
 }
+
+
+void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float speedPrecision) {
+
+    struct SpherePosition {
+        float x, y;
+    };
+
+    static std::vector<SpherePosition> spherePositions;
+    static bool initialized = false;
+
+    // Initialize positions 
+    if (!initialized) {
+        srand(static_cast<unsigned int>(time(0)));
+        int numSpheres = static_cast<int>(speedPrecision * 50);
+        for (int i = 0; i < numSpheres; ++i) {
+            float sphereX = static_cast<float>(rand()) / RAND_MAX * 10.0f - 5.0f;
+            float sphereY = static_cast<float>(rand()) / RAND_MAX * 10.0f - 5.0f;
+            spherePositions.push_back({ sphereX, sphereY });
+        }
+        initialized = true;
+    }
+
+    glUseProgram(shaderProgram);
+    float time = glfwGetTime();
+
+    for (size_t i = 0; i < spherePositions.size(); ++i) {
+        SpherePosition& position = spherePositions[i];
+
+        // subtle variations
+        float variationX = static_cast<float>(rand()) / RAND_MAX * 0.01f - 0.005f;
+        float variationY = static_cast<float>(rand()) / RAND_MAX * 0.01f - 0.005f;
+        position.x += sin(time * 2.0f) * 0.01f + variationX;
+        position.y += cos(time * 2.0f) * 0.01f + variationY;
+    }
+
+    glm::mat4 model = glm::mat4(1.0f);  
+
+    GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    GLint lightColorLoc = glGetUniformLocation(shaderProgram, "lightColor");
+    GLint objectColorLoc = glGetUniformLocation(shaderProgram, "objectColor");
+    GLint ambientStrengthLoc = glGetUniformLocation(shaderProgram, "ambientStrength");
+
+    glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+
+    glm::vec3 objectColor = glm::vec3(1.0, 0.0f, 1.0f);
+
+    glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
+    glUniform1f(ambientStrengthLoc, 0.6f);
+
+    for (size_t i = 0; i < spherePositions.size(); ++i) {
+        const SpherePosition& position = spherePositions[i];
+
+        glm::mat4 translateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.0f));
+
+        GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(translateMatrix));
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
+    }
+}
+

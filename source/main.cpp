@@ -96,6 +96,8 @@ int main() {
 
         //renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
+        //heisenbergUncertainty(shaderProgram, VAO, sphereIndices, 10.0);
+
         //renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
         glfwSwapBuffers(window);
