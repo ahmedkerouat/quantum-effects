@@ -243,3 +243,47 @@ void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<u
     }
 }
 
+void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
+    glUseProgram(shaderProgram);
+
+    //matrices 
+    glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 9.0f, 0.0f));
+    view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::rotate(view, glm::radians(pitch), glm::vec3(1.0f, 1.0f, 0.0f));
+    glm::mat4 projection = glm::perspective(glm::radians(fov * zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+
+    GLuint viewLoc = glGetUniformLocation(shaderProgram, "view");
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+    GLuint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+    //lighting
+    GLint lightColorLoc = glGetUniformLocation(shaderProgram, "lightColor");
+    GLint objectColorLoc = glGetUniformLocation(shaderProgram, "objectColor");
+    GLint ambientStrengthLoc = glGetUniformLocation(shaderProgram, "ambientStrength");
+
+    // values for lighting
+    glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+
+    // Barrier & sphere
+    glUniform3f(objectColorLoc, 1.0f, 1.0f, 1.0f);
+    glUniform1f(ambientStrengthLoc, 0.2f);
+    glm::mat4 barrierModel = glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 0.8f));
+    GLuint barrierModelLoc = glGetUniformLocation(shaderProgram, "model");
+    glUniformMatrix4fv(barrierModelLoc, 1, GL_FALSE, glm::value_ptr(barrierModel));
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
+
+    glm::vec3 sphereColor = glm::vec3(1.0f, 0.0f, 0.0f);
+
+    glUniform3fv(objectColorLoc, 1, glm::value_ptr(sphereColor));
+    glUniform1f(ambientStrengthLoc, 0.6f);
+
+    glm::mat4 sphereModel = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f , 0.0f, -2.0f + time));
+    GLuint sphereModelLoc = glGetUniformLocation(shaderProgram, "model");
+    glUniformMatrix4fv(sphereModelLoc, 1, GL_FALSE, glm::value_ptr(sphereModel));
+
+    glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
+}
+

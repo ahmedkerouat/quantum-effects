@@ -88,8 +88,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // unique sphere
-        glm::mat4 model = glm::mat4(1.0f);
-        renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+        //glm::mat4 model = glm::mat4(1.0f);
+        //renderUniqueSphere(shaderProgram, VAO, sphereIndices);
 
         // Render superposition state
         //renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
@@ -105,6 +105,8 @@ int main() {
         //float cameraRotationX = sin(glfwGetTime()) * cameraRotationSpeed;
         //float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
         //cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 1.0f);
+
+        renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
