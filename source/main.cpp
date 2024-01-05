@@ -87,31 +87,84 @@ int main() {
     // Set key callback function
     glfwSetKeyCallback(window, key_callback);
 
+    // Initialize Imgui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+    std::string recentButton = "Particle";
+
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // unique sphere
-        //glm::mat4 model = glm::mat4(1.0f);
-        //renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::Begin("Render functions");
 
-        // Render superposition state
-        //renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        struct ImGuiParameterState
+        {
+            int selected_radio;
+        };
 
-        //renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        static ImGuiParameterState state;
 
-        //heisenbergUncertainty(shaderProgram, VAO, sphereIndices, 10.0);
+        ImGui::RadioButton("Simple Particle", &state.selected_radio, 0);
+        ImGui::RadioButton("Quantum Spin", &state.selected_radio, 1);
+        ImGui::RadioButton("Uncertainty Principle", &state.selected_radio, 2);
+        ImGui::RadioButton("Quantum Superposition", &state.selected_radio, 3);
+        ImGui::RadioButton("Quantum Entaglement", &state.selected_radio, 4);
+        ImGui::RadioButton("Quantum Tunneling", &state.selected_radio, 5);
+        ImGui::RadioButton("Wave-Particle Duality", &state.selected_radio, 6);
 
-        //renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        if (state.selected_radio == 0) {
+            // unique sphere
+            glm::mat4 model = glm::mat4(1.0f);
+            renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+        }
 
-        // Quantum Spin
-        //float cameraRotationSpeed = 0.4;
-        //float cameraRotationX = sin(glfwGetTime()) * cameraRotationSpeed;
-        //float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
-        //cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 1.0f);
+        if (state.selected_radio == 1) {
+            // Quantum Spin
+            glm::mat4 model = glm::mat4(1.0f);
+            renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+            float cameraRotationSpeed = 0.4;
+            float cameraRotationX = sin(glfwGetTime()) * cameraRotationSpeed;
+            float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
+            cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 1.0f);
+        }
 
-        //renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        if (state.selected_radio == 2) {
+            heisenbergUncertainty(shaderProgram, VAO, sphereIndices, 10.0);
+        }
+
+        if (state.selected_radio == 3) {
+            // Render superposition state
+            glm::mat4 model = glm::mat4(1.0f);
+            renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+            renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        }
+
+        if (state.selected_radio == 4) {
+            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        }
+
+        if (state.selected_radio == 5) {
+            renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        }
+
+        if (state.selected_radio == 6) {
+            renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        }
+
+        ImGui::End();;
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -122,6 +175,10 @@ int main() {
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderProgram);
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     glfwTerminate();
     return 0;
