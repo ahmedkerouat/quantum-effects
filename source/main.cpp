@@ -95,8 +95,6 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    std::string recentButton = "Particle";
-
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

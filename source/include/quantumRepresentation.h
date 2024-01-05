@@ -49,6 +49,9 @@ void renderWaveTrail(GLuint shaderProgram, GLuint VAO, const std::vector<unsigne
 void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
     glUseProgram(shaderProgram);
 
+    float animationDuration = 1.0f;
+    float loopDuration = 3.0f;
+
     // Adjust the view
     glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 9.0f, 0.0f));
     view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -70,18 +73,16 @@ void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<
 
     glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
 
-    float displacement = 0.1f * sin(2.0f * time);
+    float displacement = 0.1f * sin(2.0f * time * animationDuration);
     float normalizedPosition = (displacement + 0.1f) / 0.2f;
     glm::vec3 objectColor = glm::vec3(1.0f - normalizedPosition, 0.0f, normalizedPosition);
 
     glUniform1f(ambientStrengthLoc, 0.6f);
 
-    glm::vec3 positionSphere1 = glm::vec3(-2.0f + time, 1.0f, 0.0f);
-    glm::vec3 positionSphere2 = glm::vec3(2.0f - time, 0.0f, 0.0f);
+    glm::vec3 positionSphere1 = glm::vec3(-2.0f + time * animationDuration, 1.0f, 0.0f);
+    glm::vec3 positionSphere2 = glm::vec3(2.0f - time * animationDuration, 0.0f, 0.0f);
 
     glm::vec3 colorSphere1, colorSphere2;
-
-    float animationDuration = 1.0f;
 
     if (time < animationDuration) {
         float t = time / animationDuration;
@@ -92,6 +93,9 @@ void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<
         colorSphere1 = glm::vec3(1.0f, 0.0f, 0.0f);
         colorSphere2 = glm::vec3(0.0f, 0.0f, 1.0f);
     }
+
+    if(time > animationDuration * loopDuration)
+        glfwSetTime(0);
 
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(colorSphere1));
     glm::mat4 model1 = glm::translate(glm::mat4(1.0f), positionSphere1);
@@ -246,6 +250,9 @@ void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<u
 void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
     glUseProgram(shaderProgram);
 
+    float animationDuration = 1.0f;
+    float loopDuration = 3.0f;
+
     //matrices 
     glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 9.0f, 0.0f));
     view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -280,9 +287,12 @@ void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(sphereColor));
     glUniform1f(ambientStrengthLoc, 0.6f);
 
-    glm::mat4 sphereModel = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f , 0.0f, -2.0f + time));
+    glm::mat4 sphereModel = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f , 0.0f, -2.0f + time * animationDuration));
     GLuint sphereModelLoc = glGetUniformLocation(shaderProgram, "model");
     glUniformMatrix4fv(sphereModelLoc, 1, GL_FALSE, glm::value_ptr(sphereModel));
+
+    if (time > animationDuration * loopDuration)
+        glfwSetTime(0);
 
     glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
 }
