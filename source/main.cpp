@@ -8,6 +8,11 @@
 #include "shader_config.h"
 #include <camera.h>
 #include "quantumRepresentation.h"
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 int main() {
     srand(static_cast<unsigned int>(time(nullptr)));
@@ -106,7 +111,7 @@ int main() {
         //float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
         //cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 1.0f);
 
-        renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        //renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
