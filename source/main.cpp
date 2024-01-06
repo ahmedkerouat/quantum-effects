@@ -40,6 +40,20 @@ int main() {
     }
     glfwMakeContextCurrent(window);
 
+    // logo
+
+    int logoWidth, logoHeight, logoChannels;
+    unsigned char* logoPixels = stbi_load("logo.png", &logoWidth, &logoHeight, &logoChannels, 4);
+
+
+    GLFWimage icons[1];
+    icons[0].width = logoWidth;
+    icons[0].height = logoHeight;
+    icons[0].pixels = logoPixels;
+
+    glfwSetWindowIcon(window, 1, icons);
+    stbi_image_free(logoPixels);
+
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "GLAD initialization failed" << std::endl;

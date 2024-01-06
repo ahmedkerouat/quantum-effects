@@ -35,3 +35,6 @@ add_custom_command(
 configure_file(${SHADER_SOURCE_DIR}/shader_config.h.in ${CMAKE_BINARY_DIR}/shader_config.h)
 include_directories(${CMAKE_BINARY_DIR})
 
+# Copy the logo.png file to the build directory
+file(COPY ${CMAKE_SOURCE_DIR}/resources/logo.png DESTINATION ${CMAKE_BINARY_DIR})
+
