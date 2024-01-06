@@ -108,7 +108,7 @@ void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<
     glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
 }
 
-void renderUniqueSphere(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices) {
+void renderUniqueSphere(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, glm::vec3 color) {
     glUseProgram(shaderProgram);
 
     // Set transformation matrices 
@@ -130,7 +130,7 @@ void renderUniqueSphere(GLuint shaderProgram, GLuint VAO, const std::vector<unsi
 
     // values for lighting
     glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
-    glUniform3f(objectColorLoc, 0.8f, 0.f, 0.8f);
+    glUniform3f(objectColorLoc, color[0], color[1], color[2]);
     glUniform1f(ambientStrengthLoc, 0.2f);
 
     // Draw the sphere at the origin
@@ -142,7 +142,7 @@ void renderUniqueSphere(GLuint shaderProgram, GLuint VAO, const std::vector<unsi
     glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
 }
 
-void renderSuperpositionSphere(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
+void renderSuperpositionSphere(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time, glm::vec3 color1, glm::vec3 color2) {
     glUseProgram(shaderProgram);
 
     // Set transformation matrices 

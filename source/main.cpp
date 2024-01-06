@@ -109,6 +109,11 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
+    // settings
+    glm::vec3 colorPicked = glm::vec3(0.8f, 0.f, 0.8f);
+    glm::vec3 color1 = glm::vec3(1.0f, 0.f, 0.0f);;
+    glm::vec3 color2 = glm::vec3(0.0f, 0.f, 1.0f);;
+
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -133,17 +138,24 @@ int main() {
         ImGui::RadioButton("Quantum Entaglement", &state.selected_radio, 4);
         ImGui::RadioButton("Quantum Tunneling", &state.selected_radio, 5);
         ImGui::RadioButton("Wave-Particle Duality", &state.selected_radio, 6);
+        ImGui::End();;
+        ImGui::Begin("Options");
 
         if (state.selected_radio == 0) {
             // unique sphere
             glm::mat4 model = glm::mat4(1.0f);
-            renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+            renderUniqueSphere(shaderProgram, VAO, sphereIndices, colorPicked);
+
+            ImGui::Text("Select Color:");
+            ImGui::ColorEdit3("Color", (float*)&colorPicked);
         }
 
         if (state.selected_radio == 1) {
             // Quantum Spin
             glm::mat4 model = glm::mat4(1.0f);
-            renderUniqueSphere(shaderProgram, VAO, sphereIndices);
+            renderUniqueSphere(shaderProgram, VAO, sphereIndices, colorPicked);
+            ImGui::Text("Select Color:");
+            ImGui::ColorEdit3("Color", (float*)&colorPicked);
             float cameraRotationSpeed = 0.4;
             float cameraRotationX = sin(glfwGetTime()) * cameraRotationSpeed;
             float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
@@ -157,8 +169,16 @@ int main() {
         if (state.selected_radio == 3) {
             // Render superposition state
             glm::mat4 model = glm::mat4(1.0f);
-            renderUniqueSphere(shaderProgram, VAO, sphereIndices);
-            renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime());
+
+            ImGui::Text("Select Color 1:");
+            ImGui::ColorEdit3("Color1", (float*)&color1);
+
+            ImGui::Text("Select Color 2:");
+            ImGui::ColorEdit3("Color2", (float*)&color2);
+
+            glm::vec3 colorMix ((color1[0] / 2 + color2[0] / 2), (color1[1] / 2 + color2[1] / 2), (color1[2] / 2 + color2[2] / 2));
+            renderUniqueSphere(shaderProgram, VAO, sphereIndices, colorMix);
+            renderSuperpositionSphere(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2);
         }
 
         if (state.selected_radio == 4) {
@@ -171,6 +191,13 @@ int main() {
 
         if (state.selected_radio == 6) {
             renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
+        }
+
+        if (ImGui::Button("Reset camera")) {
+            yaw = -90.0f;
+            pitch = 10.0f;
+            zoom = 1.0f;
+            cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
         }
 
         ImGui::End();;
