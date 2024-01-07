@@ -168,7 +168,7 @@ void renderSuperpositionSphere(GLuint shaderProgram, GLuint VAO, const std::vect
     // link color and position
     float displacement = 0.1f * sin(2.0f * time);
     float normalizedPosition = (displacement + 0.1f) / 0.2f;
-    glm::vec3 objectColor = glm::vec3(1.0f - normalizedPosition, 0.0f, normalizedPosition);
+    glm::vec3 objectColor = glm::mix(color1, color2, normalizedPosition);
 
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
     glUniform1f(ambientStrengthLoc, 0.6f);
