@@ -113,6 +113,7 @@ int main() {
     glm::vec3 colorPicked = glm::vec3(0.8f, 0.f, 0.8f);
     glm::vec3 color1 = glm::vec3(1.0f, 0.f, 0.0f);;
     glm::vec3 color2 = glm::vec3(0.0f, 0.f, 1.0f);;
+    float mesurePrecisionOnSpeed = 1.0f;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
@@ -163,7 +164,13 @@ int main() {
         }
 
         if (state.selected_radio == 2) {
-            heisenbergUncertainty(shaderProgram, VAO, sphereIndices, 10.0);
+                bool initializeAgain = false;
+            if (ImGui::SliderFloat("Mesure Precision on Speed", &mesurePrecisionOnSpeed, 0.0001, 10, "%.5f")) {
+                initializeAgain = true;
+            }
+            ImGui::Text("Select Color:");
+            ImGui::ColorEdit3("Color", (float*)&colorPicked);
+            heisenbergUncertainty(shaderProgram, VAO, sphereIndices, mesurePrecisionOnSpeed, colorPicked, initializeAgain);
         }
 
         if (state.selected_radio == 3) {

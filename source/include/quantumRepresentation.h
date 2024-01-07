@@ -184,7 +184,7 @@ void renderSuperpositionSphere(GLuint shaderProgram, GLuint VAO, const std::vect
 }
 
 
-void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float speedPrecision) {
+void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float speedPrecision, glm::vec3 color, bool initializeAgain) {
 
     struct SpherePosition {
         float x, y;
@@ -203,6 +203,11 @@ void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<u
             spherePositions.push_back({ sphereX, sphereY });
         }
         initialized = true;
+    }
+
+    if (initializeAgain) {
+        initialized = false;
+        spherePositions.clear();
     }
 
     glUseProgram(shaderProgram);
@@ -229,7 +234,7 @@ void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<u
 
     glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
 
-    glm::vec3 objectColor = glm::vec3(1.0, 0.0f, 1.0f);
+    glm::vec3 objectColor = glm::vec3(color[0], color[1], color[2]);
 
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
     glUniform1f(ambientStrengthLoc, 0.6f);
