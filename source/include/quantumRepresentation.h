@@ -46,11 +46,11 @@ void renderWaveTrail(GLuint shaderProgram, GLuint VAO, const std::vector<unsigne
 }
 
 
-void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
+void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time, glm::vec3 color1, glm::vec3 color2, float duration) {
     glUseProgram(shaderProgram);
 
     float animationDuration = 1.0f;
-    float loopDuration = 3.0f;
+    float loopDuration = duration;
 
     // Adjust the view
     glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 9.0f, 0.0f));
@@ -86,12 +86,12 @@ void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<
 
     if (time < animationDuration) {
         float t = time / animationDuration;
-        colorSphere1 = glm::mix(glm::vec3(0.5f, 0.0f, 0.5f), glm::vec3(0.5f, 0.0f, 0.5f), t);
-        colorSphere2 = glm::mix(glm::vec3(0.5f, 0.0f, 0.5f), glm::vec3(0.5f, 0.0f, 0.5f), t);
+        colorSphere1 = glm::mix(glm::vec3(color1[0], color1[1], color1[2]), glm::vec3(color2[0], color2[1], color2[2]), t);
+        colorSphere2 = glm::mix(glm::vec3(color1[0], color1[1], color1[2]), glm::vec3(color2[0], color2[1], color2[2]), t);
     }
     else {
-        colorSphere1 = glm::vec3(1.0f, 0.0f, 0.0f);
-        colorSphere2 = glm::vec3(0.0f, 0.0f, 1.0f);
+        colorSphere1 = glm::vec3(color1[0], color1[1], color1[2]);
+        colorSphere2 = glm::vec3(color2[0], color2[1], color2[2]);
     }
 
     if(time > animationDuration * loopDuration)

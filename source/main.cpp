@@ -114,6 +114,7 @@ int main() {
     glm::vec3 color1 = glm::vec3(1.0f, 0.f, 0.0f);;
     glm::vec3 color2 = glm::vec3(0.0f, 0.f, 1.0f);;
     float mesurePrecisionOnSpeed = 1.0f;
+    float animationDuration = 3.0f;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
@@ -189,7 +190,14 @@ int main() {
         }
 
         if (state.selected_radio == 4) {
-            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime());
+            ImGui::Text("Select Color 1:");
+            ImGui::ColorEdit3("Color1", (float*)&color1);
+
+            ImGui::Text("Select Color 2:");
+            ImGui::ColorEdit3("Color2", (float*)&color2);
+
+            ImGui::SliderFloat("Duration", &animationDuration, 0.0001, 10, "%.5f");
+            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, animationDuration);
         }
 
         if (state.selected_radio == 5) {
