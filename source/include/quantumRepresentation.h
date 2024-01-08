@@ -292,7 +292,7 @@ void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(sphereColor));
     glUniform1f(ambientStrengthLoc, 0.6f);
 
-    glm::mat4 sphereModel = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f , 0.0f, -2.0f + time * animationDuration));
+    glm::mat4 sphereModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f , 0.0f, -2.0f + time * animationDuration));
     GLuint sphereModelLoc = glGetUniformLocation(shaderProgram, "model");
     glUniformMatrix4fv(sphereModelLoc, 1, GL_FALSE, glm::value_ptr(sphereModel));
 
