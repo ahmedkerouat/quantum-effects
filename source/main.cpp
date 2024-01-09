@@ -115,6 +115,7 @@ int main() {
     glm::vec3 color2 = glm::vec3(0.0f, 0.f, 1.0f);;
     float mesurePrecisionOnSpeed = 1.0f;
     float animationDuration = 3.0f;
+    float cameraRotationSpeed = 0.4;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
@@ -158,10 +159,10 @@ int main() {
             renderUniqueSphere(shaderProgram, VAO, sphereIndices, colorPicked);
             ImGui::Text("Select Color:");
             ImGui::ColorEdit3("Color", (float*)&colorPicked);
-            float cameraRotationSpeed = 0.4;
             float cameraRotationX = sin(glfwGetTime()) * cameraRotationSpeed;
             float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
-            cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 1.0f);
+            cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 5.0f + cameraRotationSpeed);
+            ImGui::SliderFloat("Spin", &cameraRotationSpeed, 0.0001, 10, "%.5f");
         }
 
         if (state.selected_radio == 2) {
