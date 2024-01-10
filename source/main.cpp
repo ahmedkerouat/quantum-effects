@@ -202,7 +202,12 @@ int main() {
         }
 
         if (state.selected_radio == 5) {
-            renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime());
+            ImGui::SliderFloat("Duration", &animationDuration, 0.0001, 10, "%.5f");
+            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, animationDuration);
+            ImGui::Text("Select Color:");
+            ImGui::ColorEdit3("Color", (float*)&colorPicked);
+            renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime(), colorPicked, animationDuration);
+
         }
 
         if (state.selected_radio == 6) {
