@@ -114,7 +114,8 @@ int main() {
     glm::vec3 color1 = glm::vec3(1.0f, 0.f, 0.0f);;
     glm::vec3 color2 = glm::vec3(0.0f, 0.f, 1.0f);;
     float mesurePrecisionOnSpeed = 1.0f;
-    float animationDuration = 3.0f;
+    float animationDuration1 = 3.0f;
+    float animationDuration2 = 1.5f;
     float cameraRotationSpeed = 0.4;
 
     // Main render loop
@@ -197,16 +198,15 @@ int main() {
             ImGui::Text("Select Color 2:");
             ImGui::ColorEdit3("Color2", (float*)&color2);
 
-            ImGui::SliderFloat("Duration", &animationDuration, 0.0001, 10, "%.5f");
-            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, animationDuration);
+            ImGui::SliderFloat("Duration", &animationDuration1, 0.0001, 10, "%.5f");
+            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, animationDuration1);
         }
 
         if (state.selected_radio == 5) {
-            ImGui::SliderFloat("Duration", &animationDuration, 0.0001, 10, "%.5f");
-            renderEntangledSpheres(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, animationDuration);
+            ImGui::SliderFloat("Duration", &animationDuration2, 0.01, 2, "%.5f");
             ImGui::Text("Select Color:");
             ImGui::ColorEdit3("Color", (float*)&colorPicked);
-            renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime(), colorPicked, animationDuration);
+            renderQuantumTunneling(shaderProgram, VAO, sphereIndices, glfwGetTime(), colorPicked, animationDuration2);
 
         }
 
