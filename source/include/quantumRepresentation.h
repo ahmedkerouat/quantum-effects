@@ -1,4 +1,4 @@
-void renderWaveTrail(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
+void renderWaveTrail(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time, glm::vec3 color1, glm::vec3 color2, float sphereSpacing, int numSpheres, float speedFactor, float waveLength) {
     glUseProgram(shaderProgram);
 
     glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 9.0f, 0.0f));
@@ -19,16 +19,13 @@ void renderWaveTrail(GLuint shaderProgram, GLuint VAO, const std::vector<unsigne
     glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
     glUniform1f(ambientStrengthLoc, 0.6f);
 
-    int numSpheres = 50;
-    float sphereSpacing = 0.15f;
-
     for (int i = 0; i < numSpheres; ++i) {
 
         // sinusoidal wave
 
-        float displacement = sin(2.0f * time - i * sphereSpacing);
+        float displacement = sin(speedFactor * time - i * sphereSpacing) * waveLength;
         float normalizedPosition = (displacement + 0.1f) / 0.2f;
-        glm::vec3 objectColor = glm::vec3(0.0f - normalizedPosition * 0.5, 0.0f, 0.8f);
+        glm::vec3 objectColor = glm::mix(glm::vec3(color1[0], color1[1], color1[2]), glm::vec3(color2[0], color2[1], color2[2]), normalizedPosition);
 
         glUniform3fv(objectColorLoc, 1, glm::value_ptr(objectColor));
 
@@ -252,10 +249,10 @@ void heisenbergUncertainty(GLuint shaderProgram, GLuint VAO, const std::vector<u
     }
 }
 
-void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time) {
+void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<unsigned int>& sphereIndices, float time, glm::vec3 color, float animation) {
     glUseProgram(shaderProgram);
 
-    float animationDuration = 1.0f;
+    float animationDuration = animation;
     float loopDuration = 3.0f;
 
     //matrices 
@@ -287,7 +284,7 @@ void renderQuantumTunneling(GLuint shaderProgram, GLuint VAO, const std::vector<
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, sphereIndices.size(), GL_UNSIGNED_INT, 0);
 
-    glm::vec3 sphereColor = glm::vec3(1.0f, 0.0f, 0.0f);
+    glm::vec3 sphereColor = glm::vec3(color[0], color[1], color[2]);
 
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(sphereColor));
     glUniform1f(ambientStrengthLoc, 0.6f);
