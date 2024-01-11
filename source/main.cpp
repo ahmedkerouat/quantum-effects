@@ -116,7 +116,11 @@ int main() {
     float mesurePrecisionOnSpeed = 1.0f;
     float animationDuration1 = 3.0f;
     float animationDuration2 = 1.5f;
-    float cameraRotationSpeed = 0.4;
+    float cameraRotationSpeed = 0.4f;
+    float sphereSpacing = 0.15f;
+    float waveLength = 1.0f;
+    float speedFactor = 2.0f;
+    int numSpheres = 50;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
@@ -211,7 +215,18 @@ int main() {
         }
 
         if (state.selected_radio == 6) {
-            renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime());
+            ImGui::Text("Select Color 1:");
+            ImGui::ColorEdit3("Color1", (float*)&color1);
+
+            ImGui::Text("Select Color 2:");
+            ImGui::ColorEdit3("Color2", (float*)&color2);
+
+            ImGui::SliderInt("Length", &numSpheres, 1, 200, "");
+            ImGui::SliderFloat("Sphere Spacing", &sphereSpacing, 0.01, 10, "%.5f");
+            ImGui::SliderFloat("Wavelength", &waveLength, 0.0001, 2, "%.5f");
+            ImGui::SliderFloat("Speed Factor", &speedFactor, 0.0001, 10, "%.5f");
+
+            renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, sphereSpacing, numSpheres, speedFactor, waveLength);
         }
 
         if (ImGui::Button("Reset camera")) {
