@@ -32,7 +32,7 @@ int main() {
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
     // Create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "QuantumEffects", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1200, 900, "QuantumEffects", nullptr, nullptr);
     if (!window) {
         std::cerr << "GLFW window creation failed" << std::endl;
         glfwTerminate();
@@ -223,7 +223,7 @@ int main() {
 
             ImGui::SliderInt("Length", &numSpheres, 1, 200, "");
             ImGui::SliderFloat("Sphere Spacing", &sphereSpacing, 0.01, 10, "%.5f");
-            ImGui::SliderFloat("Wavelength", &waveLength, 0.0001, 2, "%.5f");
+            ImGui::SliderFloat("Wavelength", &waveLength, 0.0001, 4, "%.5f");
             ImGui::SliderFloat("Speed Factor", &speedFactor, 0.0001, 10, "%.5f");
 
             renderWaveTrail(shaderProgram, VAO, sphereIndices, glfwGetTime(), color1, color2, sphereSpacing, numSpheres, speedFactor, waveLength);
