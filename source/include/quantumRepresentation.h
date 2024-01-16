@@ -94,6 +94,8 @@ void renderEntangledSpheres(GLuint shaderProgram, GLuint VAO, const std::vector<
     if(time > animationDuration * loopDuration)
         glfwSetTime(0);
 
+    glBindVertexArray(VAO);
+
     glUniform3fv(objectColorLoc, 1, glm::value_ptr(colorSphere1));
     glm::mat4 model1 = glm::translate(glm::mat4(1.0f), positionSphere1);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model1));
