@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 3.8)
 project ("QuantumEffects")
 
 # Add source to this project's executable.
-add_executable (QuantumEffects "main.cpp" "include/sphere.h"  "include/shader.h" "shader.cpp" "include/camera.h" "include/quantumRepresentation.h" "include/imgui.h" "include/imgui_impl_glfw.h" "include/imgui_impl_opengl3.h" "include/stb_image.h" "imgui.cpp" "imgui_demo.cpp" "imgui_draw.cpp" "imgui_impl_glfw.cpp" "imgui_impl_opengl3.cpp" "imgui_tables.cpp" "imgui_widgets.cpp" "include/imconfig.h" "include/imgui_impl_opengl3_loader.h" "include/imgui_internal.h" "include/imgui_stdlib.h" "include/imstb_rectpack.h" "include/imstb_textedit.h" "include/imstb_truetype.h")
+add_executable (QuantumEffects "main.cpp" "include/sphere.h"  "include/shader.h" "shader.cpp" "include/camera.h" "include/quantumRepresentation.h" "include/imgui.h" "include/imgui_impl_glfw.h" "include/imgui_impl_opengl3.h" "include/stb_image.h" "imgui.cpp" "imgui_demo.cpp" "imgui_draw.cpp" "imgui_impl_glfw.cpp" "imgui_impl_opengl3.cpp" "imgui_tables.cpp" "imgui_widgets.cpp" "include/imconfig.h" "include/imgui_impl_opengl3_loader.h" "include/imgui_internal.h" "include/imgui_stdlib.h" "include/imstb_rectpack.h" "include/imstb_textedit.h" "include/imstb_truetype.h" "include/grid.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET QuantumEffects PROPERTY CXX_STANDARD 20)
