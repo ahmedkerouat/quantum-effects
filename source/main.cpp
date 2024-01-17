@@ -2,6 +2,7 @@
 #include <vector>
 #include <sphere.h>
 #include <shader.h>
+#include <grid.h>
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -91,6 +92,30 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
+    Grid grid(10.0f, 10.0f, 10, 10);
+    const std::vector<float>& gridVertices = grid.getVertices();
+    const std::vector<unsigned int>& gridIndices = grid.getIndices();
+
+    GLuint gridVAO, gridVBO, gridEBO;
+    glGenVertexArrays(1, &gridVAO);
+    glGenBuffers(1, &gridVBO);
+    glGenBuffers(1, &gridEBO);
+
+    glBindVertexArray(gridVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, gridVBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gridEBO);
+
+    glBufferData(GL_ARRAY_BUFFER, gridVertices.size() * sizeof(float), gridVertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, gridIndices.size() * sizeof(unsigned int), gridIndices.data(), GL_STATIC_DRAW);
+
+    // Set vertex attributes for the Grid
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
     // Set scroll callback function
     glfwSetScrollCallback(window, scroll_callback);
 
@@ -121,6 +146,7 @@ int main() {
     float waveLength = 1.0f;
     float speedFactor = 2.0f;
     int numSpheres = 50;
+    float rotationAngle = 4.6;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
@@ -131,6 +157,15 @@ int main() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::Begin("Render functions");
+
+        glUseProgram(shaderProgram);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, rotationAngle, glm::vec3(1.0f, 0.0f, 0.0f));
+
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glBindVertexArray(gridVAO);
+        glDrawElements(GL_LINES, gridIndices.size(), GL_UNSIGNED_INT, 0);
+
 
         struct ImGuiParameterState
         {
@@ -249,6 +284,9 @@ int main() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &gridVAO);
+    glDeleteBuffers(1, &gridVBO);
+    glDeleteBuffers(1, &gridEBO);
     glDeleteProgram(shaderProgram);
 
     ImGui_ImplOpenGL3_Shutdown();
