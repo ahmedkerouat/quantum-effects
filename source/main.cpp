@@ -146,26 +146,33 @@ int main() {
     float waveLength = 1.0f;
     float speedFactor = 2.0f;
     int numSpheres = 50;
+    bool gridVisibility = false;
     float rotationAngle = 4.6;
+    float translationX = 0;
+    float translationZ = -0.2f;
+    float translationY = 0.0f;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        if (gridVisibility) {
+            glUseProgram(shaderProgram);
+            glm::mat4 model = glm::mat4(1.0f);
+            glm::vec3 translationEffect = glm::vec3(translationX, translationZ, translationY);
+            model = glm::translate(model, translationEffect);
+            model = glm::rotate(model, rotationAngle, glm::vec3(1.0f, 0.0f, 0.0f));
+
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            glBindVertexArray(gridVAO);
+            glDrawElements(GL_LINES, gridIndices.size(), GL_UNSIGNED_INT, 0);
+        }
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::Begin("Render functions");
-
-        glUseProgram(shaderProgram);
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, rotationAngle, glm::vec3(1.0f, 0.0f, 0.0f));
-
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        glBindVertexArray(gridVAO);
-        glDrawElements(GL_LINES, gridIndices.size(), GL_UNSIGNED_INT, 0);
-
 
         struct ImGuiParameterState
         {
@@ -270,6 +277,7 @@ int main() {
             zoom = 1.0f;
             cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
         }
+        ImGui::Checkbox("Render grid", &gridVisibility);
 
         ImGui::End();;
 
