@@ -279,6 +279,16 @@ int main() {
         }
         ImGui::Checkbox("Render grid", &gridVisibility);
 
+        if (gridVisibility) {
+            ImGui::Text("Grid Controls");
+
+            ImGui::SliderFloat("Grid Translation X", &translationX, -10.0f, 10.0f, "%.2f");
+            ImGui::SliderFloat("Grid Translation Y", &translationY, -10.0f, 10.0f, "%.2f");
+            ImGui::SliderFloat("Grid Translation Z", &translationZ, -10.0f, 10.0f, "%.2f");
+            ImGui::SliderAngle("Grid Rotation Angle", &rotationAngle);
+
+        }
+
         ImGui::End();;
 
         ImGui::Render();
