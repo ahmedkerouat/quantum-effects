@@ -92,7 +92,7 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    Grid grid(10.0f, 10.0f, 10, 10);
+    Grid grid(5.0f, 5.0f, 10, 10);
     const std::vector<float>& gridVertices = grid.getVertices();
     const std::vector<unsigned int>& gridIndices = grid.getIndices();
 
@@ -147,10 +147,12 @@ int main() {
     float speedFactor = 2.0f;
     int numSpheres = 50;
     bool gridVisibility = false;
-    float rotationAngle = 4.6;
+    float rotationAngle = 0;
+    float finalAngle = rotationAngle + 4.6;
     float translationX = 0;
     float translationZ = -0.2f;
     float translationY = 0.0f;
+    float scaleFactor = 1;
 
     // Main render loop
     while (!glfwWindowShouldClose(window)) {
@@ -162,7 +164,8 @@ int main() {
             glm::mat4 model = glm::mat4(1.0f);
             glm::vec3 translationEffect = glm::vec3(translationX, translationZ, translationY);
             model = glm::translate(model, translationEffect);
-            model = glm::rotate(model, rotationAngle, glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::rotate(model, finalAngle, glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
 
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
             glBindVertexArray(gridVAO);
@@ -285,7 +288,9 @@ int main() {
             ImGui::SliderFloat("Grid Translation X", &translationX, -10.0f, 10.0f, "%.2f");
             ImGui::SliderFloat("Grid Translation Y", &translationY, -10.0f, 10.0f, "%.2f");
             ImGui::SliderFloat("Grid Translation Z", &translationZ, -10.0f, 10.0f, "%.2f");
-            ImGui::SliderAngle("Grid Rotation Angle", &rotationAngle);
+            ImGui::SliderFloat("Grid Size", &scaleFactor, 0, 10.0f, "%.2f");
+            ImGui::SliderAngle("Grid Rotation Angle", &rotationAngle, -360, 360, "%.f", 0);
+            finalAngle = rotationAngle + 4.6;
 
         }
 
