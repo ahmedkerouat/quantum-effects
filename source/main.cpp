@@ -219,6 +219,7 @@ int main() {
             float cameraRotationY = cos(glfwGetTime()) * cameraRotationSpeed;
             cameraPosition = glm::vec3(cameraRotationX, cameraRotationY, 5.0f + cameraRotationSpeed);
             ImGui::SliderFloat("Spin", &cameraRotationSpeed, 0.0001, 10, "%.5f");
+            gridVisibility = false;
         }
 
         if (state.selected_radio == 2) {
