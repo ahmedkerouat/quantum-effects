@@ -138,6 +138,7 @@ int main() {
     glm::vec3 colorPicked = glm::vec3(0.8f, 0.f, 0.8f);
     glm::vec3 color1 = glm::vec3(1.0f, 0.f, 0.0f);;
     glm::vec3 color2 = glm::vec3(0.0f, 0.f, 1.0f);;
+    glm::vec3 gridColor = colorPicked;
     float mesurePrecisionOnSpeed = 1.0f;
     float animationDuration1 = 3.0f;
     float animationDuration2 = 1.5f;
@@ -147,6 +148,7 @@ int main() {
     float speedFactor = 2.0f;
     int numSpheres = 50;
     bool gridVisibility = false;
+    bool linkColors = true;
     float rotationAngle = 0;
     float finalAngle = rotationAngle + 4.6;
     float translationX = 0;
@@ -161,6 +163,10 @@ int main() {
 
         if (gridVisibility) {
             glUseProgram(shaderProgram);
+            if (!linkColors) {
+                GLint objectColorLoc = glGetUniformLocation(shaderProgram, "objectColor");
+                glUniform3f(objectColorLoc, gridColor[0], gridColor[1], gridColor[2]);
+            }
             glm::mat4 model = glm::mat4(1.0f);
             glm::vec3 translationEffect = glm::vec3(translationX, translationZ, translationY);
             model = glm::translate(model, translationEffect);
@@ -284,7 +290,11 @@ int main() {
 
         if (gridVisibility) {
             ImGui::Text("Grid Controls");
-
+            ImGui::Checkbox("Link Grid & Particle Colors", &linkColors);
+            if (!linkColors) {
+                ImGui::Text("Select Grid Color:");
+                ImGui::ColorEdit3("Grid Color", (float*)&gridColor);
+            }
             ImGui::SliderFloat("Grid Translation X", &translationX, -10.0f, 10.0f, "%.2f");
             ImGui::SliderFloat("Grid Translation Y", &translationY, -10.0f, 10.0f, "%.2f");
             ImGui::SliderFloat("Grid Translation Z", &translationZ, -10.0f, 10.0f, "%.2f");
